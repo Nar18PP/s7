@@ -15,7 +15,7 @@ jobs:
       PORT: ${{ secrets.PORT }}
       NAMEDB: ${{ secrets.NAMEDB }}
       USERDB: ${{ secrets.USERDB }}
-      PASSDB: 22222222
+      PASSDB: ${{ secrets.PASSDB }}
       LOCALHOSTDB: ${{ secrets.LOCALHOSTDB }}
       VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
 
@@ -23,15 +23,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - name: Debug environment variables
+        run: |
+          echo "EMAIL_USER: $EMAIL_USER"
+          echo "EMAIL_PASS: $EMAIL_PASS"
+          echo "PORT: $PORT"
+          echo "NAMEDB: $NAMEDB"
+          echo "USERDB: $USERDB"
+          echo "PASSDB: $PASSDB"
+          echo "LOCALHOSTDB: $LOCALHOSTDB"
+          echo "VITE_SERVER_URL: $VITE_SERVER_URL"
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run script that uses secrets
+      - name: Run Node.js script that uses secrets
         run: |
           echo "Running Node.js script"
-          node deploy.js
+          node server.js
