@@ -716,11 +716,11 @@ io.on("connection", (socket) => {
         if (sult) {
           old_img = sult[0].user_img;
           const sql = "update user set user_img = ? where user_id = ?";
-          conn.query(sql, [fileName, userId], (err, sult) => {
-            if (err) {
+          conn.query(sql, [fileName, userId], (err1, sult1) => {
+            if (err1) {
               console.log(err);
             }
-            if (sult) {
+            if (sult1) {
               // กำหนดเส้นทางไฟล์ที่จะลบ
               socket.emit("changeimged", "/img/" + fileName);
 
