@@ -15,7 +15,7 @@ jobs:
       PORT: ${{ secrets.PORT }}
       NAMEDB: ${{ secrets.NAMEDB }}
       USERDB: ${{ secrets.USERDB }}
-      PASSDB: ${{ secrets.PASSDB }}
+      PASSDB: 22222222
       LOCALHOSTDB: ${{ secrets.LOCALHOSTDB }}
       VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
 
@@ -34,4 +34,4 @@ jobs:
       - name: Run script that uses secrets
         run: |
           echo "Running Node.js script"
-          node server.js
+          node deploy.js
