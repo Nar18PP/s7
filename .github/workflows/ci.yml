@@ -36,5 +36,6 @@ jobs:
 
       - name: Run Node.js script that uses secrets
         run: |
+          npm install
           echo "Running Node.js script"
-          node server.js
+          node deploy.js
