@@ -23,7 +23,6 @@ const io = new Server(server, {
   },
 });
 dotenv.config();
-
 const storage = multer.memoryStorage(); // ใช้ memoryStorage เพื่อจัดการไฟล์ใน RAM
 let fileName;
 const upload = multer({
@@ -35,7 +34,7 @@ const upload = multer({
       path.extname(file.originalname).toLowerCase()
     );
     const mimetype = allowedFileTypes.test(file.mimetype);
-
+    
     if (mimetype && extname) {
       return cb(null, true);
     } else {
@@ -53,10 +52,10 @@ app.post("/upload", upload.single("image"), async (req, res) => {
     fileName = `${Date.now()}.webp`;
     // ตั้งค่าที่จะบันทึกไฟล์เป็น WEBP
     const outputFilePath = path.join("img", `${Date.now()}.webp`);
-
+    
     // แปลงภาพและบันทึก
     await sharp(req.file.buffer).toFile(outputFilePath);
-
+    
     res.send("Image uploaded and converted to WEBP successfully!");
   } catch (err) {
     console.error("Error uploading image:", err);
@@ -67,23 +66,23 @@ app.post("/upload", upload.single("image"), async (req, res) => {
 // เส้นทาง API สำหรับลบไฟล์
 app.delete("/delete-image/:filename", (req, res) => {
   let filename = req.params.filename;
-
+  
   // ลบเครื่องหมาย ':' ออกจากชื่อไฟล์หากมี
   filename = filename.replace(/:/g, "");
-
+  
   const imagePath = path.join("img", filename);
-
+  
   // ตรวจสอบว่าไฟล์มีอยู่หรือไม่
   if (!fs.existsSync(imagePath)) {
     return res.status(404).json({ message: "File not found" });
   }
-
+  
   // ลบไฟล์
   fs.unlink(imagePath, (err) => {
     if (err) {
       return res
-        .status(500)
-        .json({ message: "Error deleting file", error: err });
+      .status(500)
+      .json({ message: "Error deleting file", error: err });
     }
     res.status(200).json({ message: "File deleted successfully" });
   });
@@ -99,6 +98,10 @@ const conn = mysql.createConnection({
   password: process.env.PASSDB,
   database: process.env.NAMEDB,
 });
+console.log('LOCALHOSTDB: '+process.env.LOCALHOSTDB)
+console.log('USERDB: '+process.env.USERDB)
+console.log('PASSDB: '+process.env.PASSDB)
+console.log('NAMEDB: '+process.env.NAMEDB)
 
 // เชื่อมต่อกับฐานข้อมูล
 conn.connect((err) => {
