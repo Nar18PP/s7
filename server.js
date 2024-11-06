@@ -8,10 +8,8 @@ import mysql from "mysql2";
 import bcrypt from "bcryptjs";
 import multer from "multer";
 import path from "path";
-import { fileURLToPath } from "url";
 import sharp from "sharp"; // นำเข้า sharp
 import fs, { accessSync } from "fs";
-import { useId } from "react";
 
 // Middleware เพื่อให้ Express รู้จัก JSONd
 const app = express();
@@ -25,10 +23,6 @@ const io = new Server(server, {
   },
 });
 dotenv.config();
-
-// สร้าง __dirname สำหรับ ES module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const storage = multer.memoryStorage(); // ใช้ memoryStorage เพื่อจัดการไฟล์ใน RAM
 let fileName;
@@ -58,7 +52,7 @@ app.post("/upload", upload.single("image"), async (req, res) => {
     }
     fileName = `${Date.now()}.webp`;
     // ตั้งค่าที่จะบันทึกไฟล์เป็น WEBP
-    const outputFilePath = path.join(__dirname, "img", `${Date.now()}.webp`);
+    const outputFilePath = path.join("img", `${Date.now()}.webp`);
 
     // แปลงภาพและบันทึก
     await sharp(req.file.buffer).toFile(outputFilePath);
@@ -77,7 +71,7 @@ app.delete("/delete-image/:filename", (req, res) => {
   // ลบเครื่องหมาย ':' ออกจากชื่อไฟล์หากมี
   filename = filename.replace(/:/g, "");
 
-  const imagePath = path.join(__dirname, "img", filename);
+  const imagePath = path.join("img", filename);
 
   // ตรวจสอบว่าไฟล์มีอยู่หรือไม่
   if (!fs.existsSync(imagePath)) {
@@ -96,7 +90,7 @@ app.delete("/delete-image/:filename", (req, res) => {
 });
 
 // ให้บริการไฟล์สถิตจากโฟลเดอร์ img
-app.use("/img", express.static(path.join(__dirname, "./img")));
+app.use("/img", express.static(path.join("./img")));
 
 // ตั้งค่าการเชื่อมต่อ MySQL
 const conn = mysql.createConnection({
@@ -733,7 +727,7 @@ io.on("connection", (socket) => {
               if (old_img === "userdefault.svg") {
                 return;
               }
-              const filePath = path.join(__dirname, "img", old_img);
+              const filePath = path.join("img", old_img);
               // ใช้ fs.unlink เพื่อลบไฟล์
               fs.unlinkSync(filePath);
             }
